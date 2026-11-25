@@ -1,0 +1,16 @@
+{
+  "name": "Dormie",
+  "short_name": "Dormie",
+  "start_url": "./",
+  "display": "standalone",
+  "background_color": "#241b38",
+  "theme_color": "#241b38",
+  "icons": [
+    {
+      "src": "favicon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any"
+    }
+  ]
+}
