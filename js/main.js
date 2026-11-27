@@ -1,24 +1,4 @@
-import { ITEMS, MOODS, PETS } from "./catalog.js";
-import { petSvg } from "./pet.js";
-import {
-  buy,
-  cancelSleep,
-  equip,
-  finishOnboarding,
-  formatClock,
-  formatDuration,
-  formatTimeLabel,
-  getState,
-  patchOnboarding,
-  resetAll,
-  saveSettings,
-  setScreen,
-  setShopTab,
-  startSleep,
-  submitMood,
-  subscribe,
-  wakeUp,
-} from "./state.js";
+// Uses globals from catalog.js, pet.js, and state.js (classic scripts).
 
 const app = document.querySelector("#app");
 let clockTimer = 0;
@@ -382,7 +362,7 @@ app.addEventListener("submit", (event) => {
   });
 });
 
-if ("serviceWorker" in navigator) {
+if ("serviceWorker" in navigator && (/^http:/i.test(location.href) || /^https:/i.test(location.href))) {
   navigator.serviceWorker.register("./sw.js").catch(() => {});
 }
 

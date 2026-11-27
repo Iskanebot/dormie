@@ -1,4 +1,4 @@
-const CACHE = "dormie-v1";
+const CACHE = "dormie-v2";
 const FILES = [
   "./",
   "./index.html",

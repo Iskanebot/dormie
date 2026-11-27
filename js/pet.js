@@ -111,7 +111,7 @@ function prop(status) {
   `;
 }
 
-export function petSvg(type, status, outfitId) {
+function petSvg(type, status, outfitId) {
   const fur = FUR[type] || FUR.bunny;
   const tail = type === "cat"
     ? `<path d="M150 176 q28 8 18 28" fill="none" stroke="${fur}" stroke-width="8" stroke-linecap="round"/>`

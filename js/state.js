@@ -1,6 +1,7 @@
-import { MOODS } from "./catalog.js";
-
 const KEY = "dormie-v1";
+
+
+
 
 function todayKey(date = new Date()) {
   const y = date.getFullYear();
@@ -16,14 +17,14 @@ function shiftDay(key, delta) {
   return todayKey(date);
 }
 
-export function sleepScore(hours, targetHours, mood) {
+function sleepScore(hours, targetHours, mood) {
   const found = MOODS.find((item) => item.id === mood);
   const multiplier = found ? found.multiplier : 0.85;
   const raw = (hours / targetHours) * 70 + multiplier * 30;
   return Math.max(0, Math.min(100, Math.round(raw)));
 }
 
-export function bandFor(score) {
+function bandFor(score) {
   if (score >= 85) return { status: "RADIANT", coins: 50 };
   if (score >= 60) return { status: "SLEEPY", coins: 25 };
   if (score >= 30) return { status: "EXHAUSTED", coins: 5 };
@@ -80,13 +81,8 @@ function applyMissedDay(state) {
 }
 
 function load() {
-  try {
-    const raw = localStorage.getItem(KEY);
-    if (!raw) return fresh();
-    return applyMissedDay({ ...fresh(), ...JSON.parse(raw) });
-  } catch {
-    return fresh();
-  }
+  // Always start from a fresh default state on load.
+  return fresh();
 }
 
 let state = load();
@@ -99,30 +95,30 @@ function commit(next) {
   listeners.forEach((fn) => fn(state));
 }
 
-export function getState() {
+function getState() {
   return state;
 }
 
-export function subscribe(fn) {
+function subscribe(fn) {
   listeners.add(fn);
   return () => listeners.delete(fn);
 }
 
-export function setScreen(screen) {
+function setScreen(screen) {
   commit({ ...state, screen, lastResult: screen === "home" ? state.lastResult : null });
 }
 
-export function setShopTab(shopTab) {
+function setShopTab(shopTab) {
   commit({ ...state, shopTab });
 }
 
-export function patchOnboarding(partial, options = {}) {
+function patchOnboarding(partial, options = {}) {
   state = { ...state, ...partial };
   localStorage.setItem(KEY, JSON.stringify(state));
   if (!options.silent) listeners.forEach((fn) => fn(state));
 }
 
-export function finishOnboarding() {
+function finishOnboarding() {
   const name = state.petName.trim();
   if (!name) return;
   commit({
@@ -134,7 +130,7 @@ export function finishOnboarding() {
   });
 }
 
-export function startSleep() {
+function startSleep() {
   commit({
     ...state,
     session: { start: new Date().toISOString(), phase: "sleeping" },
@@ -142,16 +138,16 @@ export function startSleep() {
   });
 }
 
-export function cancelSleep() {
+function cancelSleep() {
   commit({ ...state, session: null });
 }
 
-export function wakeUp() {
+function wakeUp() {
   if (!state.session) return;
   commit({ ...state, session: { ...state.session, phase: "mood" } });
 }
 
-export function submitMood(mood) {
+function submitMood(mood) {
   if (!state.session) return;
   const start = new Date(state.session.start);
   const end = new Date();
@@ -203,7 +199,7 @@ export function submitMood(mood) {
   });
 }
 
-export function buy(item) {
+function buy(item) {
   if (state.owned.includes(item.id) || state.coins < item.price) return;
   commit({
     ...state,
@@ -212,7 +208,7 @@ export function buy(item) {
   });
 }
 
-export function equip(item) {
+function equip(item) {
   if (!state.owned.includes(item.id)) return;
   if (item.kind === "outfit") {
     commit({ ...state, outfit: state.outfit === item.id ? null : item.id });
@@ -221,7 +217,7 @@ export function equip(item) {
   commit({ ...state, room: state.room === item.id ? null : item.id });
 }
 
-export function saveSettings({ targetHours, bedtime, wake, petName }) {
+function saveSettings({ targetHours, bedtime, wake, petName }) {
   commit({
     ...state,
     targetHours,
@@ -231,23 +227,23 @@ export function saveSettings({ targetHours, bedtime, wake, petName }) {
   });
 }
 
-export function resetAll() {
+function resetAll() {
   localStorage.removeItem(KEY);
   commit(fresh());
 }
 
-export function formatClock(date = new Date()) {
+function formatClock(date = new Date()) {
   return date.toLocaleTimeString([], { hour: "numeric", minute: "2-digit" });
 }
 
-export function formatDuration(ms) {
+function formatDuration(ms) {
   const total = Math.max(0, Math.floor(ms / 60000));
   const h = Math.floor(total / 60);
   const m = total % 60;
   return `${h}h ${String(m).padStart(2, "0")}m`;
 }
 
-export function formatTimeLabel(value) {
+function formatTimeLabel(value) {
   const [h, m] = value.split(":").map(Number);
   const date = new Date();
   date.setHours(h, m, 0, 0);

@@ -1,10 +1,10 @@
-export const PETS = [
+const PETS = [
   { id: "bunny", label: "Dormie Bunny" },
   { id: "bear", label: "Dormie Bear" },
   { id: "cat", label: "Dormie Cat" },
 ];
 
-export const ITEMS = [
+const ITEMS = [
   { id: "gown", kind: "outfit", name: "Graduation Cap & Gown", price: 80 },
   { id: "hoodie", kind: "outfit", name: "Hoodie & Headphones", price: 60 },
   { id: "robe", kind: "outfit", name: "Cozy Robe", price: 40 },
@@ -15,12 +15,12 @@ export const ITEMS = [
   { id: "coffee", kind: "room", name: "Coffee Maker", price: 45 },
 ];
 
-export const MOODS = [
+const MOODS = [
   { id: "exhausted", emoji: "😴", label: "Exhausted", hint: "Low energy", multiplier: 0.6 },
   { id: "okay", emoji: "😐", label: "Okay", hint: "Decent rest", multiplier: 0.85 },
   { id: "energized", emoji: "⚡", label: "Energized", hint: "Well-rested", multiplier: 1 },
 ];
 
-export function itemById(id) {
+function itemById(id) {
   return ITEMS.find((item) => item.id === id) || null;
 }
